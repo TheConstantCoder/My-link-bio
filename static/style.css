@@ -114,14 +114,14 @@ button:hover {
 }
 
 .link-card {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   padding: 18px 20px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--surface);
-  color: var(--accent-dark);
-  font-weight: 700;
-  text-decoration: none;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -130,12 +130,66 @@ button:hover {
   box-shadow: 0 12px 28px rgba(79, 70, 229, 0.12);
 }
 
+.link-card-anchor {
+  color: var(--accent-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.link-card-anchor:hover {
+  text-decoration: underline;
+}
+
+.link-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-button,
+.delete-button {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.edit-button {
+  background: #0f766e;
+}
+
+.edit-button:hover {
+  background: #115e59;
+}
+
+.delete-button {
+  background: #e11d48;
+}
+
+.delete-button:hover {
+  background: #be123c;
+}
+
 @media (max-width: 640px) {
   .page {
     padding: 24px;
   }
 
+  .link-card,
+  .link-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   button {
     width: 100%;
+  }
+
+  .edit-button {
+    width: 100%;
+    text-align: center;
   }
 }
