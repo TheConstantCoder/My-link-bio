@@ -4,18 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Links</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   </head>
   <body>
-    <nav>
+    <main class="page">
+    <nav class="nav">
       <a href="/about">About</a>
     </nav>
     <h1>My Links</h1>
-    <ul>
+    <form class="form" action="/add" method="post">
+      <div class="field">
+        <label for="site_name">Site Name</label>
+        <input id="site_name" name="site_name" type="text" />
+      </div>
+      <div class="field">
+        <label for="url">URL</label>
+        <input id="url" name="url" type="url" />
+      </div>
+      <button type="submit">add link</button>
+    </form>
+    <ul class="links">
       {% for link in links %}
       <li>
-        <a href="{{ link.url }}">{{ link.name }}</a>
+        <a class="link-card" href="{{ link.url }}">{{ link.name }}</a>
       </li>
       {% endfor %}
     </ul>
+    </main>
   </body>
 </html>
