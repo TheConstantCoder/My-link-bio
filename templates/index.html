@@ -27,7 +27,38 @@
       {% for link in links %}
       <li>
         <div class="link-card">
-          <a class="link-card-anchor" href="{{ link.url }}">{{ link.name }}</a>
+          <div class="link-content">
+            {% if link.image_url != "not available" %}
+            <img class="link-card-image" src="{{ link.image_url }}" alt="{{ link.name }} preview image" />
+            {% endif %}
+            <strong class="link-card-title">
+              {% if link.title != "not available" %}
+              {{ link.title }}
+              {% else %}
+              {{ link.name }}
+              {% endif %}
+            </strong>
+            <p class="link-card-description">
+              {% if link.description != "not available" %}
+              {{ link.description }}
+              {% else %}
+              Description not available
+              {% endif %}
+            </p>
+            <div class="link-meta">
+              <div class="link-meta-row">
+                <span class="link-meta-label">Image URL</span>
+                <span>
+                  {% if link.image_url != "not available" %}
+                  {{ link.image_url }}
+                  {% else %}
+                  Image not available
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+            <a class="link-card-anchor" href="{{ link.url }}">{{ link.url }}</a>
+          </div>
           <div class="link-actions">
             <a class="edit-button" href="{{ url_for('edit_link', link_index=loop.index0) }}">edit</a>
             <form action="/delete" method="post">

@@ -1,11 +1,52 @@
+from bs4 import BeautifulSoup
 from flask import Flask, redirect, render_template, request, url_for
+import requests
 
 
 app = Flask(__name__)
+
+
+def get_og_content(soup, property_name):
+    tag = soup.find("meta", property=property_name)
+    if tag and tag.get("content"):
+        return tag["content"].strip()
+    return "not available"
+
+
+def build_link(site_name, url):
+    metadata = {
+        "title": "not available",
+        "description": "not available",
+        "image_url": "not available",
+    }
+
+    try:
+        session = requests.Session()
+        session.trust_env = False
+        response = session.get(url, timeout=5, headers={"User-Agent": "Mozilla/5.0"})
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+        metadata = {
+            "title": get_og_content(soup, "og:title"),
+            "description": get_og_content(soup, "og:description"),
+            "image_url": get_og_content(soup, "og:image"),
+        }
+    except requests.RequestException:
+        pass
+
+    return {
+        "name": site_name,
+        "url": url,
+        "title": metadata["title"],
+        "description": metadata["description"],
+        "image_url": metadata["image_url"],
+    }
+
+
 links = [
-    {"name": "GitHub", "url": "https://github.com"},
-    {"name": "LinkedIn", "url": "https://www.linkedin.com"},
-    {"name": "YouTube", "url": "https://www.youtube.com"},
+    build_link("GitHub", "https://github.com"),
+    build_link("LinkedIn", "https://www.linkedin.com"),
+    build_link("YouTube", "https://www.youtube.com"),
 ]
 
 
@@ -26,7 +67,7 @@ def add_link():
         )
 
         if not duplicate_exists:
-            links.append({"name": site_name, "url": url})
+            links.append(build_link(site_name, url))
 
     return redirect(url_for("index"))
 
@@ -66,7 +107,7 @@ def update_link(link_index):
             )
 
             if not duplicate_exists:
-                links[link_index] = {"name": site_name, "url": url}
+                links[link_index] = build_link(site_name, url)
 
     return redirect(url_for("index"))
 
